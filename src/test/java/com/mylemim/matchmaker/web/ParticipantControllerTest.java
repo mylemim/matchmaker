@@ -1,8 +1,8 @@
-package com.mylemim.matchmaker;
+package com.mylemim.matchmaker.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mylemim.matchmaker.domain.Session;
-import com.mylemim.matchmaker.service.SessionRepository;
+import com.mylemim.matchmaker.domain.Participant;
+import com.mylemim.matchmaker.service.ParticipantRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,17 +17,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Created by Mile on 7.3.2017..
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-public class SessionServiceControllerTest {
-
+public class ParticipantControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -35,35 +36,24 @@ public class SessionServiceControllerTest {
     private ObjectMapper mapper;
 
     @Autowired
-    SessionRepository sessionRepository;
+    ParticipantRepository participantRepository;
 
     @Before
     public void setUp() {
-        sessionRepository.deleteAll();
+        participantRepository.deleteAll();
     }
 
-    @Test
-    public void listSessions() throws Exception {
-        final String testSessionName = "some";
-
-        sessionRepository.save(new Session(testSessionName));
-
-        mvc.perform(MockMvcRequestBuilders.get("/sessions").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].name", is(testSessionName)));
-    }
 
     @Test
-    public void createSession() throws Exception {
-        final String testSessionName = "testName";
+    public void createParticipant() throws Exception {
+        final String testName = "testName";
 
-        RequestBuilder postBuilder = MockMvcRequestBuilders.post("/sessions")
+        RequestBuilder postBuilder = MockMvcRequestBuilders.post("/participants")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(new Session(testSessionName)));
+                .content(mapper.writeValueAsString(new Participant(testName)));
 
         mvc.perform(postBuilder)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is(testSessionName)));
+                .andExpect(jsonPath("$.name", is(testName)));
     }
 }

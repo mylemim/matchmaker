@@ -24,7 +24,7 @@ public class SessionController {
     @RequestMapping(value = "/sessions", method = RequestMethod.POST)
     @ResponseBody
     public Session createSession(@RequestBody Session session) {
-        return sessionService.createSession(session.getName());
+        return sessionService.createSession(session);
     }
 
 }

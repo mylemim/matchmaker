@@ -21,6 +21,10 @@ public class SessionService {
 
     public Session createSession(String name) {
         Session session = new Session(name);
+        return createSession(session);
+    }
+
+    public Session createSession(Session session) {
         return sessionRepository.save(session);
     }
 }
